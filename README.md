@@ -1,7 +1,11 @@
 # moodle_poodle_doodle
 Making art.
-To run, open in Android Studio the root folder.
-Add a new Android App configuration use the doodle main module.
+To run, open in Android Studio and select a new activity in a new project.
+The activity should be an empty views activity.
+Create the project with whatever name you like (I used doodler).
+Replace the src folder under AndroidStudioProjects/yourProjectName/app
+with the src folder I have in this repo.
+Add a new Android App configuration that uses the doodle main module.
 Build the project (with the hammer icon).
 Run the project in the emulator.
 Click buttons in the emulator to draw!
@@ -9,12 +13,12 @@ Click buttons in the emulator to draw!
 https://youtu.be/sa2JCQ1Dilt
 # References
 http://developer.android.com/training/
-Building Your First App
-Android Dialogs
-Canvas and Drawables
-Custom Drawing
-GridView
-ConstraintLayout
+Building Your First App \\
+Android Dialogs \\
+Canvas and Drawables \\
+Custom Drawing \\
+GridView \\
+ConstraintLayout \\
 
 [Pen](https://www.google.com/imgres?q=pen%20icon&imgurl=https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F176%2F176318.png&imgrefurl=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Fpen_176318&docid=0XGlpewrtiEv3M&tbnid=fphDTEvch-3w5M&vet=12ahUKEwjC3c_s3oqKAxVHFFkFHancFioQM3oECB0QAA..i&w=512&h=512&hcb=2&ved=2ahUKEwjC3c_s3oqKAxVHFFkFHancFioQM3oECB0QAA)
 
