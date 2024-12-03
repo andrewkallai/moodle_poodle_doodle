@@ -10,7 +10,7 @@ Build the project (with the hammer icon).
 Run the project in the emulator.
 Click buttons in the emulator to draw!
 # YOUTUBE
-https://youtu.be/sa2JCQ1Dilt
+https://youtu.be/u63KcoFWgok
 # References
 http://developer.android.com/training/ \
 Building Your First App \
