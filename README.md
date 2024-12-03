@@ -12,13 +12,13 @@ Click buttons in the emulator to draw!
 # YOUTUBE
 https://youtu.be/sa2JCQ1Dilt
 # References
-http://developer.android.com/training/
+http://developer.android.com/training/ \
 Building Your First App \
 Android Dialogs \
 Canvas and Drawables \
 Custom Drawing \
 GridView \
-ConstraintLayout \
+ConstraintLayout
 
 [Pen](https://www.google.com/imgres?q=pen%20icon&imgurl=https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F176%2F176318.png&imgrefurl=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Fpen_176318&docid=0XGlpewrtiEv3M&tbnid=fphDTEvch-3w5M&vet=12ahUKEwjC3c_s3oqKAxVHFFkFHancFioQM3oECB0QAA..i&w=512&h=512&hcb=2&ved=2ahUKEwjC3c_s3oqKAxVHFFkFHancFioQM3oECB0QAA)
 
