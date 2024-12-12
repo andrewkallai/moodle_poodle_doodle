@@ -1,9 +1,5 @@
 package com.example.doodler;
 
-import static java.security.AccessController.getContext;
-
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,19 +7,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class DoodleView extends View {
     public static final float TOUCH_TOLERANCE = 10;
@@ -36,6 +28,9 @@ public class DoodleView extends View {
     private boolean isErasing = false;
     private int previousColor;
     private float previousWidth;
+
+    private Stack<Path> undoStack;
+    private Stack<Path> redoStack;
 
     public DoodleView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -52,6 +47,9 @@ public class DoodleView extends View {
         paintLine.setStrokeCap(Paint.Cap.ROUND);
         pathMap = new HashMap<>();
         previousPointMap = new HashMap<>();
+
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
     }
 
     @Override
@@ -65,20 +63,17 @@ public class DoodleView extends View {
     protected void onDraw(@NonNull Canvas canvas) {
         canvas.drawBitmap(bitmap, 0, 0, paintScreen);
 
-        for (Integer key: pathMap.keySet()) {
+        for (Integer key : pathMap.keySet()) {
             canvas.drawPath(pathMap.get(key), paintLine);
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        /*
-        handles touch for the app
-         */
         int action = event.getActionMasked();
         int actionIndex = event.getActionIndex();
 
-        if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_UP) {
+        if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
             touchStarted(event.getX(actionIndex), event.getY(actionIndex), event.getPointerId(actionIndex));
         } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) {
             touchEnded(event.getPointerId(actionIndex));
@@ -137,17 +132,22 @@ public class DoodleView extends View {
 
     private void touchEnded(int pointerId) {
         Path path = pathMap.get(pointerId);
-        bitmapCanvas.drawPath(path, paintLine);
-        path.reset();
+        if (path != null) {
+            bitmapCanvas.drawPath(path, paintLine);
+            undoStack.push(new Path(path));
+            redoStack.clear(); // Clear redo stack after a new stroke
+            path.reset();
+        }
     }
 
     public void clear() {
         pathMap.clear();
         previousPointMap.clear();
+        undoStack.clear();
+        redoStack.clear();
         bitmap.eraseColor(Color.WHITE);
         invalidate();
     }
-
 
     public void setEraserMode(boolean erasing) {
         if (erasing) {
@@ -180,6 +180,29 @@ public class DoodleView extends View {
         return (int) paintLine.getStrokeWidth();
     }
 
+    public void undoStroke() {
+        if (!undoStack.isEmpty()) {
+            Path undonePath = undoStack.pop();
+            redoStack.push(undonePath);
+            redrawBitmap();
+        }
+    }
 
+    public void redoStroke() {
+        if (!redoStack.isEmpty()) {
+            Path redonePath = redoStack.pop();
+            undoStack.push(redonePath);
+            bitmapCanvas.drawPath(redonePath, paintLine);
+            invalidate();
+        }
+    }
 
+    private void redrawBitmap() {
+        bitmap.eraseColor(Color.WHITE);
+        for (Path path : undoStack) {
+            bitmapCanvas.drawPath(path, paintLine);
+        }
+        invalidate();
+    }
 }
+

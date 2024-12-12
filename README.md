@@ -1,5 +1,5 @@
 # moodle_poodle_doodle
-Making art.
+Making art. \
 To run, open in Android Studio and select a new activity in a new project.
 The activity should be an empty views activity.
 Create the project with whatever name you like (I used doodler).
@@ -11,6 +11,8 @@ Run the project in the emulator.
 Click buttons in the emulator to draw!
 # YOUTUBE
 https://youtu.be/u63KcoFWgok
+For custom feature:
+https://youtu.be/Z8y7cSJD2hE
 # References
 http://developer.android.com/training/ \
 Building Your First App \

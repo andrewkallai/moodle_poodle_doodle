@@ -1,5 +1,14 @@
 package com.example.doodler;
 
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,10 +29,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 
 public class MainActivity extends AppCompatActivity {
     private DoodleView doodleView;
@@ -38,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private View colorView;
     private boolean isEraserActive = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,26 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         doodleView = findViewById(R.id.view);
+
+        // Initialize Undo button
+        Button undoButton = findViewById(R.id.undoButton);
+        undoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doodleView.undoStroke();
+                Toast.makeText(MainActivity.this, "Undo action performed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Initialize Redo button
+        Button redoButton = findViewById(R.id.redoButton);
+        redoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doodleView.redoStroke();
+                Toast.makeText(MainActivity.this, "Redo action performed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -62,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.clearId) {
             doodleView.clear();
-
         } else if (item.getItemId() == R.id.colorId) {
             showColorDialog();
         } else if (item.getItemId() == R.id.lineWidthId) {
@@ -82,11 +105,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     void showColorDialog() {
+        // Existing color dialog implementation
         currentAlertDialog = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.color_dialog, null);
         alphaSeekBar = view.findViewById(R.id.alphaSeekBar);
@@ -95,10 +118,11 @@ public class MainActivity extends AppCompatActivity {
         blueSeekBar = view.findViewById(R.id.blueSeekBar);
         colorView = view.findViewById(R.id.colorView);
 
-        alphaSeekBar.setOnSeekBarChangeListener(colorSeekBarChange);
-        redSeekBar.setOnSeekBarChangeListener(colorSeekBarChange);
-        greenSeekBar.setOnSeekBarChangeListener(colorSeekBarChange);
-        blueSeekBar.setOnSeekBarChangeListener(colorSeekBarChange);
+
+        alphaSeekBar.setOnSeekBarChangeListener(widthSeekBarChange);
+        redSeekBar.setOnSeekBarChangeListener(widthSeekBarChange);
+        greenSeekBar.setOnSeekBarChangeListener(widthSeekBarChange);
+        blueSeekBar.setOnSeekBarChangeListener(widthSeekBarChange);
 
         int color = doodleView.getDrawingColor();
         alphaSeekBar.setProgress(Color.alpha(color));
@@ -128,35 +152,6 @@ public class MainActivity extends AppCompatActivity {
         colorDialog = currentAlertDialog.create();
         colorDialog.show();
     }
-
-
-    private SeekBar.OnSeekBarChangeListener colorSeekBarChange = new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            doodleView.setBackgroundColor(Color.argb(
-                    alphaSeekBar.getProgress(),
-                    redSeekBar.getProgress(),
-                    greenSeekBar.getProgress(),
-                    blueSeekBar.getProgress()
-            ));
-
-
-            colorView.setBackgroundColor(Color.argb(
-                    alphaSeekBar.getProgress(),
-                    redSeekBar.getProgress(),
-                    greenSeekBar.getProgress(),
-                    blueSeekBar.getProgress()
-            ));
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-        }
-    };
 
     void showLineWidthDialog() {
         currentAlertDialog = new AlertDialog.Builder(this);
@@ -209,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
         }
+//
 
     };
 }
